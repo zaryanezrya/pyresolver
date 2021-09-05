@@ -7,11 +7,17 @@ from ._command import ICommand
 from ._exception import ResolveDependencyException
 
 
+class NotFoundInRootScope:
+    def __call__(self, key) -> Any:
+        raise ResolveDependencyException(f'Dependency {key} is missing')
+
+
 class ScopesThreadingLocalProvider:
     __tl_store = threading.local()
+    __global_root_scope = DependenciesScope(NotFoundInRootScope())
 
     def __init__(self):
-        root_scope = DependenciesScope(NotFoundInRootScope())
+        root_scope = self.__global_root_scope
 
         root_scope['IoC.Register'] = RegisterCommandResolver()
         root_scope['Scopes.Root'] = lambda: root_scope
@@ -21,13 +27,15 @@ class ScopesThreadingLocalProvider:
 
         default_scope = DependenciesScope(FindInParentScope(root_scope))
 
-        root_scope['Scopes.Deafault'] = lambda: default_scope
+        root_scope['Scopes.Default'] = lambda: default_scope
         self.__tl_store.current_scope = default_scope
 
     @property
     def current(self) -> IDependenciesScope:
-        if not self.__tl_store.current_scope:
-            self.__tl_store.current_scope = resolve('Scopes.Deafault')
+        current_scope = getattr(self.__tl_store, 'current_scope', None)
+        if not current_scope:
+            self.__tl_store.current_scope = self.__global_root_scope
+            self.__tl_store.current_scope = resolve('Scopes.Default')
         return self.__tl_store.current_scope
 
     @current.setter
@@ -88,11 +96,6 @@ class RegisterCommand(ICommand):
 
     def __call__(self) -> None:
         self.scope[self.key] = self.strategy
-
-
-class NotFoundInRootScope:
-    def __call__(self, key) -> Any:
-        raise ResolveDependencyException(f'Dependency {key} is missing')
 
 
 class FindInParentScope:
