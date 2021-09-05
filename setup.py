@@ -1,6 +1,5 @@
 import os
-from distutils.core import setup
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 here = os.path.dirname(__file__)
@@ -20,7 +19,8 @@ setup(
     project_urls={
         'Source': 'https://github.com/zaryanezrya/pyresolver',
     },
-    version='0.0.1',
+    version='0.0.2',
+    packages=find_packages(),
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
