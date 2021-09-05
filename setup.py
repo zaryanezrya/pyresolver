@@ -1,6 +1,6 @@
 import os
 from distutils.core import setup
-from setuptools import setup, find_packages
+from setuptools import setup
 
 
 here = os.path.dirname(__file__)
@@ -20,10 +20,7 @@ setup(
     project_urls={
         'Source': 'https://github.com/zaryanezrya/pyresolver',
     },
-    setup_requires=['setuptools_scm'],
-    use_scm_version=True,
-    packages=find_packages(),
-    include_package_data=True,
+    version='0.0.1',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
