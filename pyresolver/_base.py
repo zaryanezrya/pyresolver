@@ -4,17 +4,13 @@ import threading
 from ._scope import IDependenciesScope, DependenciesScope
 from ._strategy import IResolveDependencyStrategy
 from ._command import ICommand
-from ._exception import ResolveDependencyException
-
-
-class NotFoundInRootScope:
-    def __call__(self, key) -> Any:
-        raise ResolveDependencyException(f'Dependency {key} is missing')
+from ._exception import raise_, ResolveDependencyException
 
 
 class ScopesThreadingLocalProvider:
     __tl_store = threading.local()
-    __global_root_scope = DependenciesScope(NotFoundInRootScope())
+    __global_root_scope = DependenciesScope(
+        lambda key: raise_(ResolveDependencyException(f'Dependency {key} is missing')))
 
     def __init__(self):
         root_scope = self.__global_root_scope
@@ -25,17 +21,12 @@ class ScopesThreadingLocalProvider:
         root_scope['Scopes.executeInScope'] = ExecuteInScopeResolver()
         root_scope['Scopes.executeInNewScope'] = ExecuteInNewScopeResolver()
 
-        default_scope = DependenciesScope(FindInParentScope(root_scope))
-
-        root_scope['Scopes.Default'] = lambda: default_scope
-        self.__tl_store.current_scope = default_scope
-
     @property
     def current(self) -> IDependenciesScope:
-        current_scope = getattr(self.__tl_store, 'current_scope', None)
-        if not current_scope:
+        if not getattr(self.__tl_store, 'current_scope', None):
             self.__tl_store.current_scope = self.__global_root_scope
-            self.__tl_store.current_scope = resolve('Scopes.Default')
+            self.__tl_store.current_scope = resolve(
+                'Scopes.New', self.__global_root_scope)
         return self.__tl_store.current_scope
 
     @current.setter
