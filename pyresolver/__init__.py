@@ -1,13 +1,6 @@
-from ._base import scopes, resolve
-from ._strategy import IResolveDependencyStrategy
-from ._command import ICommand
-from ._exception import ResolveDependencyException
+from ._ioc import resolve
 
 
 __all__ = [
-    'scopes'
-    'resolve',
-    'IResolveDependencyStrategy',
-    'ICommand'
-    'ResolveDependencyException'
+    'resolve'
 ]

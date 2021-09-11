@@ -15,7 +15,7 @@ setup(
     license='MIT',
     author='Ivan Sharun',
     author_email='ivan@sha.run',
-    keywords=['IoC', 'Inversion on control', 'resolve'],
+    keywords=['IoC', 'Inversion of control', 'resolve'],
     project_urls={
         'Source': 'https://github.com/zaryanezrya/pyresolver',
     },
