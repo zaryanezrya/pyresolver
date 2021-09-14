@@ -9,9 +9,9 @@ class IOCBaseContainer(IDependenciesContainer):
         self.__not_found_strategy = not_found_strategy
         self.__store = {}
 
-        self.__store['IoC.Resolve'] = IOCBaseResolveResolver(self)
-        self.__store['IoC.Register'] = IOCBaseRegisterCommandResolver(self)
-        self.__store['IoC.BaseContainer'] = lambda: self
+        self.__store["IoC.Resolve"] = IOCBaseResolveResolver(self)
+        self.__store["IoC.Register"] = IOCBaseRegisterCommandResolver(self)
+        self.__store["IoC.BaseContainer"] = lambda: self
 
     def __getitem__(self, key: str) -> IResolveDependencyStrategy:
         try:
@@ -46,12 +46,17 @@ class IOCBaseRegisterCommandResolver(IResolveDependencyStrategy):
             return IOCBaseRegisterCommand(self.__container, key, strategy)
         except IndexError:
             raise ResolveDependencyException(
-                'IoC.Register requires two args: key(str) and strategy(IResolveDependencyStrategy)'
+                "IoC.Register requires two args: key(str) and strategy(IResolveDependencyStrategy)"
             )
 
 
 class IOCBaseRegisterCommand(ICommand):
-    def __init__(self, scope: IDependenciesContainer, key: str, strategy: IResolveDependencyStrategy):
+    def __init__(
+        self,
+        scope: IDependenciesContainer,
+        key: str,
+        strategy: IResolveDependencyStrategy,
+    ):
         self.container = scope
         self.key = key
         self.strategy = strategy
