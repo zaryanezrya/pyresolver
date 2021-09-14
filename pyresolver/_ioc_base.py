@@ -43,14 +43,14 @@ class IOCBaseRegisterCommandResolver(IResolveDependencyStrategy):
             key = args[0]
             strategy = args[1]
             # TODO: Throw ResolveDependencyException "agrs[0] must have type String, args[1] must have IResolveDependencyStrategy"
-            return RegisterCommand(self.__container, key, strategy)
+            return IOCBaseRegisterCommand(self.__container, key, strategy)
         except IndexError:
             raise ResolveDependencyException(
                 'IoC.Register requires two args: key(str) and strategy(IResolveDependencyStrategy)'
             )
 
 
-class RegisterCommand(ICommand):
+class IOCBaseRegisterCommand(ICommand):
     def __init__(self, scope: IDependenciesContainer, key: str, strategy: IResolveDependencyStrategy):
         self.container = scope
         self.key = key
