@@ -1,7 +1,7 @@
 from typing import Any, Callable
 
-from .interface import IDependenciesContainer, IResolveDependencyStrategy, ICommand
-from .exception import ResolveDependencyException
+from .interfaces import IDependenciesContainer, IResolveDependencyStrategy, ICommand
+from .exceptions import ResolveDependencyException
 
 
 class IOCBaseContainer(IDependenciesContainer):

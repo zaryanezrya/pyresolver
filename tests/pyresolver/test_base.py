@@ -1,7 +1,7 @@
 import unittest
 
 from pyresolver import resolve
-from pyresolver.exception import ResolveDependencyException
+from pyresolver.exceptions import ResolveDependencyException
 
 
 class TestBase(unittest.TestCase):

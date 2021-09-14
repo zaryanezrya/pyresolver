@@ -1,6 +1,6 @@
 from typing import Any
 
-from .exception import ResolveDependencyException
+from .exceptions import ResolveDependencyException
 from ._exception_helper import raise_
 from ._ioc_base import IOCBaseContainer
 
